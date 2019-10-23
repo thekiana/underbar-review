@@ -124,7 +124,7 @@
     // the members, it also maintains an array of results.
     var arr = [];
 
-    _.each(collection, function(element) {
+    _.each(collection, function (element) {
       arr.push(iterator(element));
     });
 
@@ -170,6 +170,19 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function (collection, iterator, accumulator) {
+    iterator = iterator || _.identity;
+    var init = arguments.length === 2;
+
+    _.each(collection, function(item) {
+      if (init) {
+        init = false;
+        accumulator = collection[0];
+      } else {
+        accumulator = iterator(accumulator, item);
+      }
+    });
+
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
